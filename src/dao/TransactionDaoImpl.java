@@ -35,7 +35,6 @@ public class TransactionDaoImpl extends ConnectionMySQL implements TransactionDa
 	    Transaction tran = new Transaction();
 	    
 	    try {
-//	    	tran.setTRANSACTION_TYPE( rs.getString("TRANSACTION_TYPE") );
 		    tran.setTOTAL_VALUES( rs.getDouble("TOTAL_VALUES") );
 		    tran.setTOTAL_NUMBERS( rs.getInt("TOTAL_NUMBERS") );
 		    
