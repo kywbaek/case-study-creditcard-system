@@ -278,10 +278,15 @@ public class CustomerRunnable {
 		String toDate = y+"-"+m+"-"+d;
 		
 		ArrayList<Transaction> trans = cd.getDetailByCustDate(ssn, ccn, fromDate, toDate);
-		if (trans.size()==0) {
-			System.out.println("Transactions with the information provided do not exist in the database...");
+		try {
+			if (trans.size()==0) {
+				throw new NoResultException("Transactions with the information provided do not exist in the database...");
+			}
+		} catch (NoResultException e) {
+			System.out.println(e.getMessage());
 			return;
 		}
+		
 		System.out.println("TRANSACTION_ID\tDAY\tMONTH\tYEAR\tCREDIT_CARD_NO\t\t"
 				+ "CUST_SSN\tBRANCH_CODE\tTRANSACTION_TYPE\tTRANSACTION_VALUE");
 		for (Transaction tran: trans) {
