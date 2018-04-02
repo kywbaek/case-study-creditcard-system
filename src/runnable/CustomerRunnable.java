@@ -8,7 +8,7 @@ import dao.CustomerDao;
 import dao.CustomerDaoImpl;
 import model.Customer;
 import model.Transaction;
-import resource.MyException;
+import resource.NoResultException;
 
 public class CustomerRunnable {
 	Scanner sc = new Scanner(System.in);
@@ -172,9 +172,9 @@ public class CustomerRunnable {
 		ArrayList<Transaction> trans = cd.getMonthDetailsByCC(ssn, ccn, y, m);
 		try {
 			if (trans.size()==0) {
-				throw new MyException("Transactions with the information provided do not exist in the database...");
+				throw new NoResultException("Transactions with the information provided do not exist in the database...");
 			}
-		} catch (MyException e) {
+		} catch (NoResultException e) {
 			System.out.println(e.getMessage());
 			return;
 		}

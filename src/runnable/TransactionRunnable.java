@@ -7,7 +7,7 @@ import java.util.Scanner;
 import dao.TransactionDao;
 import dao.TransactionDaoImpl;
 import model.Transaction;
-import resource.MyException;
+import resource.NoResultException;
 
 public class TransactionRunnable {
 	Scanner sc = new Scanner(System.in);
@@ -43,9 +43,9 @@ public class TransactionRunnable {
 		ArrayList<Transaction> trans = td.tranByCustZipDate(zip, y, m);
 		try {
 			if (trans.size()==0) {
-				throw new MyException("Transactions with the information provided do not exist in the database...");
+				throw new NoResultException("Transactions with the information provided do not exist in the database...");
 			}
-		} catch (MyException e) {
+		} catch (NoResultException e) {
 			System.out.println(e.getMessage());
 			return;
 		}
