@@ -1,6 +1,11 @@
 package runnable;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -12,6 +17,8 @@ import resource.NoResultException;
 
 public class CustomerRunnable {
 	Scanner sc = new Scanner(System.in);
+	String fileName, strFormat;
+	PrintWriter printTo = null;
 	
 	public void getCustDetails() {
 		CustomerDao cd = new CustomerDaoImpl();
@@ -45,8 +52,32 @@ public class CustomerRunnable {
 			System.out.println("CUST_ZIP\t"+cust.getCUST_ZIP());
 			System.out.println("CUST_PHONE\t"+cust.getCUST_PHONE());
 			System.out.println("CUST_EMAIL\t"+cust.getCUST_EMAIL());
+			
+			fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+			printTo = new PrintWriter(new File(fileName));
+			strFormat = "%-16s%s\n";
+			printTo.println("The Customer Details\n");
+			printTo.printf(strFormat,"FIRST_NAME",cust.getFIRST_NAME());
+			printTo.printf(strFormat,"MIDDLE_NAME",cust.getMIDDLE_NAME());
+			printTo.printf(strFormat,"LAST_NAME",cust.getLAST_NAME());
+			printTo.printf(strFormat,"SSN",cust.getSSN());
+			printTo.printf(strFormat,"CREDIT_CARD_NO",cust.getCREDIT_CARD_NO());
+			printTo.printf(strFormat,"APT_NO",cust.getAPT_NO());
+			printTo.printf(strFormat,"STREET_NAME",cust.getSTREET_NAME());
+			printTo.printf(strFormat,"CUST_CITY",cust.getCUST_CITY());
+			printTo.printf(strFormat,"CUST_STATE",cust.getCUST_STATE());
+			printTo.printf(strFormat,"CUST_COUNTRY",cust.getCUST_COUNTRY());
+			printTo.printf(strFormat,"CUST_ZIP",cust.getCUST_ZIP());
+			printTo.printf(strFormat,"CUST_PHONE",cust.getCUST_PHONE());
+			printTo.printf(strFormat,"CUST_EMAIL",cust.getCUST_EMAIL());
+			System.out.println("\nThe output is recorded to the file >>> "+fileName);
+			printTo.close();
+			
 		} catch (NullPointerException e) {
 			System.out.println("Customer with the information provided does not exist in the database...");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
 		}
 	}
 	
