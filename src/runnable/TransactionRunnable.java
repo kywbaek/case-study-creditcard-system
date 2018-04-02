@@ -1,6 +1,11 @@
 package runnable;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -11,7 +16,9 @@ import resource.NoResultException;
 
 public class TransactionRunnable {
 	Scanner sc = new Scanner(System.in);
-
+	String fileName, strFormat;
+	PrintWriter printTo = null;
+	
 	public void tranByCustZipDate() {
 		TransactionDao td = new TransactionDaoImpl();
 		
@@ -49,9 +56,21 @@ public class TransactionRunnable {
 			System.out.println(e.getMessage());
 			return;
 		}
+		
+		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+		try {
+			printTo = new PrintWriter(new File(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		strFormat = "%-16s%-8s%-8s%-8s%-20s%-12s%-14s%-20s%s\n";
+		printTo.println("The transactions made by customers living in the zipcode("+zip+") on "+y+"/"+m+"\n");
+		printTo.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
+				"CUST_SSN","BRANCH_CODE","TRANSACTION_TYPE","TRANSACTION_VALUE");
 
-		System.out.println("TRANSACTION_ID\tDAY\tMONTH\tYEAR\tCREDIT_CARD_NO\t\t"
-				+ "CUST_SSN\tBRANCH_CODE\tTRANSACTION_TYPE\tTRANSACTION_VALUE");
+		System.out.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
+				"CUST_SSN","BRANCH_CODE","TRANSACTION_TYPE","TRANSACTION_VALUE");
 		
 		for (Transaction tran: trans) {
 			int TRANSACTION_ID = tran.getTRANSACTION_ID();
@@ -62,14 +81,16 @@ public class TransactionRunnable {
 			int CUST_SSN = tran.getCUST_SSN();
 			int BRANCH_CODE = tran.getBRANCH_CODE();
 			String TRANSACTION_TYPE = tran.getTRANSACTION_TYPE();
-			while (TRANSACTION_TYPE.length()<8) {
-				TRANSACTION_TYPE += " ";
-			}
 			double TRANSACTION_VALUE = tran.getTRANSACTION_VALUE();
-			System.out.println(TRANSACTION_ID+"\t\t"+DAY+"\t"+MONTH+"\t"+YEAR+"\t"
-								+CREDIT_CARD_NO+"\t"+CUST_SSN+"\t"+BRANCH_CODE+"\t\t"
-								+TRANSACTION_TYPE+"\t\t"+TRANSACTION_VALUE);
+			
+			printTo.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
+					CUST_SSN,BRANCH_CODE,TRANSACTION_TYPE,TRANSACTION_VALUE);
+		
+			System.out.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
+					CUST_SSN,BRANCH_CODE,TRANSACTION_TYPE,TRANSACTION_VALUE);
 		}
+		System.out.println("\nThe output is recorded to the file >>> "+fileName);
+		printTo.close();
 	}
 	
 	public void tranTotalBytype() {
