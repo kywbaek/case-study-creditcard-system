@@ -9,6 +9,9 @@ public class Main {
 		TransactionRunnable tr;
 		CustomerRunnable cr;
 		Scanner sc = new Scanner(System.in);
+		
+		// print available options and implement switch cases for them
+		// run until "8) Exit" is selected
 		while (true) {
 			System.out.println("** Available Options **");
 			System.out.println("1) Display the transactions made by customers living in a given zipcode for a given month and year");
@@ -21,7 +24,8 @@ public class Main {
 			System.out.println("8) Exit\n");
 			System.out.print("Please select query from the above options: ");
 			Integer option = 0;
-					
+			
+			// run until valid option is selected
 			while (!(option instanceof Integer) || option>8 || option<1) {
 				try {
 					option = sc.nextInt();

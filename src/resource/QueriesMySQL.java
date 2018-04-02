@@ -1,6 +1,7 @@
 package resource;
 
 public class QueriesMySQL {
+	// option 1
 	public final static String tranByCustZipDate = "SELECT cr.* "
 												+ "	FROM CDW_SAPP_CREDITCARD cr " 
 												+ "		JOIN CDW_SAPP_CUSTOMER c "
@@ -10,14 +11,14 @@ public class QueriesMySQL {
 												+ "		AND cr.YEAR = ? "
 												+ "		AND cr.MONTH = ? "
 												+ "ORDER BY cr.DAY DESC";	//cust_zip(string), month(int), year(int)
-			
+	// option 2	
 	public final static String tranTotalBytype = "SELECT TRANSACTION_TYPE, "
 												+ "	SUM(TRANSACTION_VALUE) total_values, "
 												+ "	COUNT(*) total_numbers "
 												+ "FROM cdw_sapp_creditcard	"
 												+ "WHERE TRANSACTION_TYPE=? "
 												+ "GROUP BY TRANSACTION_TYPE";	//transaction_type(string)
-	
+	// option 3
 	public final static String tranTotalByBranState = "SELECT br.BRANCH_STATE, "
 													+ "	SUM(cr.TRANSACTION_VALUE) total_values, "
 													+ "	COUNT(*) total_numbers "
@@ -27,16 +28,20 @@ public class QueriesMySQL {
 													+ "WHERE br.BRANCH_STATE = ? "
 													+ "GROUP BY br.BRANCH_STATE";	//branch_state(string)
 	
-	
-	
+	// option 4
 	public final static String getCustDetails = "SELECT * FROM cdw_sapp_customer "
 												+ "WHERE SSN = ? "
 												+ "	AND CREDIT_CARD_NO = ?";	//ssn(int), credit_card_no(string)
-	
+	// option 5
+	public final static String updateCust = "UPDATE cdw_sapp_customer SET FIRST_NAME=?, MIDDLE_NAME=?, LAST_NAME=?, "
+											+ "APT_NO=?, STREET_NAME=?, CUST_CITY=?, CUST_STATE=?, "
+											+ "CUST_COUNTRY=?, CUST_ZIP=?, CUST_PHONE=?, CUST_EMAIL=? "
+											+ "WHERE SSN=? AND CREDIT_CARD_NO=?";
+	// option 6
 	public final static String getMonthDetailsByCC = "SELECT * FROM cdw_sapp_creditcard "
 													+ "WHERE (CUST_SSN, CREDIT_CARD_NO, YEAR, MONTH) = ( ?, ?, ?, ? ) "
 													+ "ORDER BY DAY DESC";	//cust_ssn(int), credit_card_no(string), month(int), year(int)
-	
+	// option 7
 	public final static String getDetailByCustDate = "SELECT * FROM cdw_sapp_creditcard "
 													+ "WHERE CUST_SSN = ? "
 													+ "	AND CREDIT_CARD_NO = ? "
@@ -45,12 +50,9 @@ public class QueriesMySQL {
 													+ "ORDER BY YEAR DESC, MONTH DESC, DAY DESC";
 													//ssn(int), credit_card_no(string),fromdate(string),todate(string)
 	
+	// CRUD operations
 	public final static String getAllCust = "SELECT * FROM cdw_sapp_customer";
 	public final static String insertCust = "INSERT INTO cdw_sapp_customer values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-	public final static String updateCust = "UPDATE cdw_sapp_customer SET FIRST_NAME=?, MIDDLE_NAME=?, LAST_NAME=?, "
-											+ "APT_NO=?, STREET_NAME=?, CUST_CITY=?, CUST_STATE=?, "
-											+ "CUST_COUNTRY=?, CUST_ZIP=?, CUST_PHONE=?, CUST_EMAIL=? "
-											+ "WHERE SSN=? AND CREDIT_CARD_NO=?";
 	public final static String deleteCust = "DELETE FROM cdw_sapp_customer WHERE SSN=? AND CREDIT_CARD_NO=?";
 	
 	public final static String getTranDetails = "SELECT * FROM cdw_sapp_creditcard WHERE TRANSACTION_ID = ?";

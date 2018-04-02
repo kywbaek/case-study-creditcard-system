@@ -19,6 +19,7 @@ public class TransactionRunnable {
 	String fileName, strFormat;
 	PrintWriter printTo = null;
 	
+	// option 1
 	public void tranByCustZipDate() {
 		TransactionDao td = new TransactionDaoImpl();
 		
@@ -26,6 +27,8 @@ public class TransactionRunnable {
 		String zip = sc.next();
 		System.out.print("Please the year: ");
 		int y;
+		
+		// run until valid input is entered
 		while (true) {
 			try {
 				y = sc.nextInt();
@@ -37,6 +40,8 @@ public class TransactionRunnable {
 		}
 		System.out.print("Please the month: ");
 		int m;
+		
+		// run until valid input is entered
 		while (true) {
 			try {
 				m = sc.nextInt();
@@ -48,6 +53,8 @@ public class TransactionRunnable {
 		}
 		
 		ArrayList<Transaction> trans = td.tranByCustZipDate(zip, y, m);
+		
+		// return when no result
 		try {
 			if (trans.size()==0) {
 				throw new NoResultException("Transactions with the information provided do not exist in the database...");
@@ -57,6 +64,7 @@ public class TransactionRunnable {
 			return;
 		}
 		
+		// print the result and write to a file
 		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
 		try {
 			printTo = new PrintWriter(new File(fileName));
@@ -93,9 +101,11 @@ public class TransactionRunnable {
 		printTo.close();
 	}
 	
+	// option 2
 	public void tranTotalBytype() {
 		TransactionDao td = new TransactionDaoImpl();
 
+		// print the result and write to a file
 		try {
 			// get available transaction types
 			ArrayList<Transaction> trans = td.tranTypes();
@@ -128,11 +138,14 @@ public class TransactionRunnable {
 		}
 	}
 	
+	// option 3
 	public void tranTotalByBranState() {
 		TransactionDao td = new TransactionDaoImpl();
 
 		System.out.print("Please enter the branch state: ");
 		String state = sc.next();
+		
+		// print the result and write to a file
 		try {
 			Transaction tran = td.tranTotalByBranState(state);
 			

@@ -20,10 +20,13 @@ public class CustomerRunnable {
 	String fileName, strFormat;
 	PrintWriter printTo = null;
 	
+	// option 4
 	public void getCustDetails() {
 		CustomerDao cd = new CustomerDaoImpl();
 		System.out.print("Please enter the social security number: "); 
 		int ssn;
+		
+		// run until valid input is entered
 		while (true) {
 			try {
 				ssn = sc.nextInt();
@@ -38,6 +41,7 @@ public class CustomerRunnable {
 
 		Customer cust = cd.getCust(ssn, ccn);
 		
+		// print the result and write to a file
 		try {
 			System.out.println("FIRST_NAME\t"+cust.getFIRST_NAME());
 			System.out.println("MIDDLE_NAME\t"+cust.getMIDDLE_NAME());
@@ -81,6 +85,7 @@ public class CustomerRunnable {
 		}
 	}
 	
+	// helper method for option 5
 	public void getCustDetails(Customer cust) {
 		System.out.println("\tSSN\t\t"+cust.getSSN());
 		System.out.println("\tCREDIT_CARD_NO\t"+cust.getCREDIT_CARD_NO());
@@ -97,12 +102,15 @@ public class CustomerRunnable {
 		System.out.println("10)\tCUST_EMAIL\t"+cust.getCUST_EMAIL()+"\n");
 	}
 	
+	// option 5
 	public void modifyCustDetails() {
 		int cols = 0;
 		String modify = "y";
 		CustomerDao cd = new CustomerDaoImpl();
 		System.out.print("Please enter the social security number: ");
 		int ssn;
+		
+		// run until valid input is entered
 		while (true) {
 			try {
 				ssn = sc.nextInt();
@@ -116,7 +124,8 @@ public class CustomerRunnable {
 		String ccn = sc.next();
 		
 		Customer cust = cd.getCust(ssn, ccn);
-
+		
+		// return when no result
 		try {
 			System.out.println("\t** Current Information **");
 			getCustDetails(cust);
@@ -125,7 +134,7 @@ public class CustomerRunnable {
 			return;
 		}
 		
-
+		// run until value of "modify" changes (i.e. until user makes all needed modifications)
 		while (modify.equals("y")) {
 			System.out.print("Please enter the field number to modify: ");
 			Integer colNum = -1;
@@ -162,10 +171,13 @@ public class CustomerRunnable {
 		}
 	}
 	
+	// option 6
 	public void getMonthDetailsByCC() {
 		CustomerDao cd = new CustomerDaoImpl();
 		System.out.print("Please enter the social security number: "); 
 		int ssn;
+		
+		// run until valid input is entered
 		while (true) {
 			try {
 				ssn = sc.nextInt();
@@ -179,6 +191,8 @@ public class CustomerRunnable {
 		String ccn = sc.next();
 		System.out.print("Please enter the year: "); 
 		int y;
+		
+		// run until valid input is entered
 		while (true) {
 			try {
 				y = sc.nextInt();
@@ -190,6 +204,8 @@ public class CustomerRunnable {
 		}
 		System.out.print("Please enter the month: "); 
 		int m;
+		
+		// run until valid input is entered
 		while (true) {
 			try {
 				m = sc.nextInt();
@@ -247,6 +263,7 @@ public class CustomerRunnable {
 		printTo.close();
 	}
 	
+	// option 7
 	public void getDetailByCustDate() {
 		CustomerDao cd = new CustomerDaoImpl();
 		System.out.print("Please enter the social security number: "); 
