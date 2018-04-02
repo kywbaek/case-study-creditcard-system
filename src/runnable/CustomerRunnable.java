@@ -210,8 +210,22 @@ public class CustomerRunnable {
 			return;
 		}
 		
-		System.out.println("TRANSACTION_ID\tDAY\tMONTH\tYEAR\tCREDIT_CARD_NO\t\t"
-				+ "CUST_SSN\tBRANCH_CODE\tTRANSACTION_TYPE\tTRANSACTION_VALUE");
+		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+		try {
+			printTo = new PrintWriter(new File(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		strFormat = "%-16s%-8s%-8s%-8s%-20s%-12s%-14s%-20s%s\n";
+		printTo.println("The customer SSN: "+ssn);
+		printTo.println("The customer CCN: "+ccn);
+		printTo.println("\n**The monthly bill for "+y+"/"+m+"**\n");
+		printTo.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
+				"CUST_SSN","BRANCH_CODE","TRANSACTION_TYPE","TRANSACTION_VALUE");
+
+		System.out.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
+				"CUST_SSN","BRANCH_CODE","TRANSACTION_TYPE","TRANSACTION_VALUE");
 		for (Transaction tran: trans) {
 			int TRANSACTION_ID = tran.getTRANSACTION_ID();
 			int DAY = tran.getDAY();
@@ -221,14 +235,16 @@ public class CustomerRunnable {
 			int CUST_SSN = tran.getCUST_SSN();
 			int BRANCH_CODE = tran.getBRANCH_CODE();
 			String TRANSACTION_TYPE = tran.getTRANSACTION_TYPE();
-			while (TRANSACTION_TYPE.length()<8) {
-				TRANSACTION_TYPE += " ";
-			}
 			double TRANSACTION_VALUE = tran.getTRANSACTION_VALUE();
-			System.out.println(TRANSACTION_ID+"\t\t"+DAY+"\t"+MONTH+"\t"+YEAR+"\t"
-								+CREDIT_CARD_NO+"\t"+CUST_SSN+"\t"+BRANCH_CODE+"\t\t"
-								+TRANSACTION_TYPE+"\t\t"+TRANSACTION_VALUE);
+			
+			printTo.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
+					CUST_SSN,BRANCH_CODE,TRANSACTION_TYPE,TRANSACTION_VALUE);
+		
+			System.out.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
+					CUST_SSN,BRANCH_CODE,TRANSACTION_TYPE,TRANSACTION_VALUE);
 		}
+		System.out.println("\nThe output is recorded to the file >>> "+fileName);
+		printTo.close();
 	}
 	
 	public void getDetailByCustDate() {
