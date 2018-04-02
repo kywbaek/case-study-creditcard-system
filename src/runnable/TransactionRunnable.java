@@ -140,8 +140,19 @@ public class TransactionRunnable {
 			int totalNum = tran.getTOTAL_NUMBERS();
 			System.out.println("Total transaction value: " + totalVal);
 			System.out.println("Total number of transaction: " + totalNum);
+			
+			fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+			printTo = new PrintWriter(new File(fileName));
+			printTo.println("The branch state: "+state);
+			printTo.println("Total transaction value: " + totalVal);
+			printTo.println("Total number of transaction: " + totalNum);
+			System.out.println("\nThe output is recorded to the file >>> "+fileName);
+			printTo.close();
 		} catch (NullPointerException e) {
 			System.out.println("Transactions with the information provided do not exist in the database...");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
 		}
 	}
 }
