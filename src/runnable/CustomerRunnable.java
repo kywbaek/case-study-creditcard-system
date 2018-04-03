@@ -17,7 +17,7 @@ import resource.NoResultException;
 
 public class CustomerRunnable {
 	Scanner sc = new Scanner(System.in);
-	String fileName, strFormat;
+	String fileName, strFormat, strFormatCSV;
 	PrintWriter printTo = null;
 	
 	// option 4
@@ -57,23 +57,14 @@ public class CustomerRunnable {
 			System.out.println("CUST_PHONE\t"+cust.getCUST_PHONE());
 			System.out.println("CUST_EMAIL\t"+cust.getCUST_EMAIL());
 			
-			fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+			fileName = new SimpleDateFormat("yyyyMMddHHmmss'_CustDetail.csv'").format(new Date());
 			printTo = new PrintWriter(new File(fileName));
-			strFormat = "%-16s%s\n";
-			printTo.println("The Customer Details\n");
-			printTo.printf(strFormat,"FIRST_NAME",cust.getFIRST_NAME());
-			printTo.printf(strFormat,"MIDDLE_NAME",cust.getMIDDLE_NAME());
-			printTo.printf(strFormat,"LAST_NAME",cust.getLAST_NAME());
-			printTo.printf(strFormat,"SSN",cust.getSSN());
-			printTo.printf(strFormat,"CREDIT_CARD_NO",cust.getCREDIT_CARD_NO());
-			printTo.printf(strFormat,"APT_NO",cust.getAPT_NO());
-			printTo.printf(strFormat,"STREET_NAME",cust.getSTREET_NAME());
-			printTo.printf(strFormat,"CUST_CITY",cust.getCUST_CITY());
-			printTo.printf(strFormat,"CUST_STATE",cust.getCUST_STATE());
-			printTo.printf(strFormat,"CUST_COUNTRY",cust.getCUST_COUNTRY());
-			printTo.printf(strFormat,"CUST_ZIP",cust.getCUST_ZIP());
-			printTo.printf(strFormat,"CUST_PHONE",cust.getCUST_PHONE());
-			printTo.printf(strFormat,"CUST_EMAIL",cust.getCUST_EMAIL());
+			strFormatCSV = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n";
+			printTo.printf(strFormatCSV,"FIRST_NAME","MIDDLE_NAME","LAST_NAME","SSN","CREDIT_CARD_NO","APT_NO",
+						"STREET_NAME","CUST_CITY","CUST_STATE","CUST_COUNTRY","CUST_ZIP","CUST_PHONE","CUST_EMAIL");
+			printTo.printf(strFormatCSV,cust.getFIRST_NAME(),cust.getMIDDLE_NAME(),cust.getLAST_NAME(),cust.getSSN(),
+					cust.getCREDIT_CARD_NO(),cust.getAPT_NO(),cust.getSTREET_NAME(),cust.getCUST_CITY(),cust.getCUST_STATE(),
+					cust.getCUST_COUNTRY(),cust.getCUST_ZIP(),cust.getCUST_PHONE(),cust.getCUST_EMAIL());
 			System.out.println("\nThe output is recorded to the file >>> "+fileName);
 			printTo.close();
 			
@@ -217,6 +208,8 @@ public class CustomerRunnable {
 		}
 		
 		ArrayList<Transaction> trans = cd.getMonthDetailsByCC(ssn, ccn, y, m);
+		
+		// return when no result
 		try {
 			if (trans.size()==0) {
 				throw new NoResultException("Transactions with the information provided do not exist in the database...");
@@ -226,7 +219,8 @@ public class CustomerRunnable {
 			return;
 		}
 		
-		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+		// print the result and write to a file
+		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_CustTranByMonth.csv'").format(new Date());
 		try {
 			printTo = new PrintWriter(new File(fileName));
 		} catch (IOException e) {
@@ -234,10 +228,8 @@ public class CustomerRunnable {
 			return;
 		}
 		strFormat = "%-16s%-8s%-8s%-8s%-20s%-12s%-14s%-20s%s\n";
-		printTo.println("The customer SSN: "+ssn);
-		printTo.println("The customer CCN: "+ccn);
-		printTo.println("\n**The monthly bill for "+y+"/"+m+"**\n");
-		printTo.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
+		strFormatCSV = "%s,%s,%s,%s,%s,%s,%s,%s,%s\n";
+		printTo.printf(strFormatCSV, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
 				"CUST_SSN","BRANCH_CODE","TRANSACTION_TYPE","TRANSACTION_VALUE");
 
 		System.out.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
@@ -253,7 +245,7 @@ public class CustomerRunnable {
 			String TRANSACTION_TYPE = tran.getTRANSACTION_TYPE();
 			double TRANSACTION_VALUE = tran.getTRANSACTION_VALUE();
 			
-			printTo.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
+			printTo.printf(strFormatCSV, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
 					CUST_SSN,BRANCH_CODE,TRANSACTION_TYPE,TRANSACTION_VALUE);
 		
 			System.out.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
@@ -268,6 +260,8 @@ public class CustomerRunnable {
 		CustomerDao cd = new CustomerDaoImpl();
 		System.out.print("Please enter the social security number: "); 
 		int ssn;
+		
+		// run until valid input is entered
 		while (true) {
 			try {
 				ssn = sc.nextInt();
@@ -295,6 +289,8 @@ public class CustomerRunnable {
 		String toDate = y+"-"+m+"-"+d;
 		
 		ArrayList<Transaction> trans = cd.getDetailByCustDate(ssn, ccn, fromDate, toDate);
+		
+		// return when no result
 		try {
 			if (trans.size()==0) {
 				throw new NoResultException("Transactions with the information provided do not exist in the database...");
@@ -304,7 +300,8 @@ public class CustomerRunnable {
 			return;
 		}
 		
-		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+		// print the result and write to a file
+		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_CustTranByPeriod.csv'").format(new Date());
 		try {
 			printTo = new PrintWriter(new File(fileName));
 		} catch (IOException e) {
@@ -312,10 +309,8 @@ public class CustomerRunnable {
 			return;
 		}
 		strFormat = "%-16s%-8s%-8s%-8s%-20s%-12s%-14s%-20s%s\n";
-		printTo.println("The customer SSN: "+ssn);
-		printTo.println("The customer CCN: "+ccn);
-		printTo.println("\n**The transactions from "+fromDate+" to "+toDate+"**\n");
-		printTo.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
+		strFormatCSV = "%s,%s,%s,%s,%s,%s,%s,%s,%s\n";
+		printTo.printf(strFormatCSV, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
 				"CUST_SSN","BRANCH_CODE","TRANSACTION_TYPE","TRANSACTION_VALUE");
 
 		System.out.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
@@ -331,7 +326,7 @@ public class CustomerRunnable {
 			String TRANSACTION_TYPE = tran.getTRANSACTION_TYPE();
 			double TRANSACTION_VALUE = tran.getTRANSACTION_VALUE();
 			
-			printTo.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
+			printTo.printf(strFormatCSV, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
 					CUST_SSN,BRANCH_CODE,TRANSACTION_TYPE,TRANSACTION_VALUE);
 		
 			System.out.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,

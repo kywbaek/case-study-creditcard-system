@@ -16,7 +16,7 @@ import resource.NoResultException;
 
 public class TransactionRunnable {
 	Scanner sc = new Scanner(System.in);
-	String fileName, strFormat;
+	String fileName, strFormat, strFormatCSV;
 	PrintWriter printTo = null;
 	
 	// option 1
@@ -65,7 +65,7 @@ public class TransactionRunnable {
 		}
 		
 		// print the result and write to a file
-		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+		fileName = new SimpleDateFormat("yyyyMMddHHmmss'_TranByCustZipDate.csv'").format(new Date());
 		try {
 			printTo = new PrintWriter(new File(fileName));
 		} catch (IOException e) {
@@ -73,8 +73,8 @@ public class TransactionRunnable {
 			return;
 		}
 		strFormat = "%-16s%-8s%-8s%-8s%-20s%-12s%-14s%-20s%s\n";
-		printTo.println("The transactions made by customers living in the zipcode("+zip+") on "+y+"/"+m+"\n");
-		printTo.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
+		strFormatCSV = "%s,%s,%s,%s,%s,%s,%s,%s,%s\n";
+		printTo.printf(strFormatCSV, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
 				"CUST_SSN","BRANCH_CODE","TRANSACTION_TYPE","TRANSACTION_VALUE");
 
 		System.out.printf(strFormat, "TRANSACTION_ID","DAY","MONTH","YEAR","CREDIT_CARD_NO",
@@ -91,7 +91,7 @@ public class TransactionRunnable {
 			String TRANSACTION_TYPE = tran.getTRANSACTION_TYPE();
 			double TRANSACTION_VALUE = tran.getTRANSACTION_VALUE();
 			
-			printTo.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
+			printTo.printf(strFormatCSV, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
 					CUST_SSN,BRANCH_CODE,TRANSACTION_TYPE,TRANSACTION_VALUE);
 		
 			System.out.printf(strFormat, TRANSACTION_ID,DAY,MONTH,YEAR,CREDIT_CARD_NO,
@@ -123,11 +123,11 @@ public class TransactionRunnable {
 			System.out.println("Total transaction value: " + totalVal);
 			System.out.println("Total number of transaction: " + totalNum);
 			
-			fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+			fileName = new SimpleDateFormat("yyyyMMddHHmmss'_TranTotalByType.csv'").format(new Date());
 			printTo = new PrintWriter(new File(fileName));
-			printTo.println("The transaction type: "+type);
-			printTo.println("Total transaction value: " + totalVal);
-			printTo.println("Total number of transaction: " + totalNum);
+			strFormatCSV = "%s,%s,%s\n";
+			printTo.printf(strFormatCSV,"TRANSACTION_TYPE","TOTAL_VALUE","TOTAL_NUMBER_OF_TRANSACTION");
+			printTo.printf(strFormatCSV,type,totalVal,totalNum);
 			System.out.println("\nThe output is recorded to the file >>> "+fileName);
 			printTo.close();
 		} catch (NullPointerException e) {
@@ -154,11 +154,11 @@ public class TransactionRunnable {
 			System.out.println("Total transaction value: " + totalVal);
 			System.out.println("Total number of transaction: " + totalNum);
 			
-			fileName = new SimpleDateFormat("yyyyMMddHHmmss'_output.txt'").format(new Date());
+			fileName = new SimpleDateFormat("yyyyMMddHHmmss'_TranTotalByState.csv'").format(new Date());
 			printTo = new PrintWriter(new File(fileName));
-			printTo.println("The branch state: "+state);
-			printTo.println("Total transaction value: " + totalVal);
-			printTo.println("Total number of transaction: " + totalNum);
+			strFormatCSV = "%s,%s,%s\n";
+			printTo.printf(strFormatCSV,"BRANCH_STATE","TOTAL_VALUE","TOTAL_NUMBER_OF_TRANSACTION");
+			printTo.printf(strFormatCSV,state,totalVal,totalNum);
 			System.out.println("\nThe output is recorded to the file >>> "+fileName);
 			printTo.close();
 		} catch (NullPointerException e) {
